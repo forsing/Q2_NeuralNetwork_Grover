@@ -43,7 +43,7 @@ except ImportError:
 # =========================
 # Konfiguracija
 # =========================
-CSV_PATH = Path("/Users/4c/Desktop/GHQ/data/loto7hh_4600_k31.csv")
+CSV_PATH = Path("/data/loto7hh_4600_k31.csv")
 N_QUBITS = 6          # 2^6 = 64 stanja; indeksi 0..38 -> brojevi 1..39  (default)
 N_NUMBERS = 7
 N_MAX = 39
@@ -234,7 +234,7 @@ Q2 NN: CSV: /data/loto7hh_4600_k31.csv
 redova: 4600 | seed: 39
 BEST hparam: nq= 6 | N: 64 | M (marked): 15 | iter: 2 (Δ vs k*: 0) | cos(bias, freq_csv): 0.97047
 top-M brojevi (1..39): [7, 8, 9, 10, 11, 22, 23, 26, 29, 32, 33, 34, 35, 37, 39]
-predikcija NEXT: (7, 8, 9, 10, 11, 22, 23)
+predikcija NEXT: (7, 8, x, y, z, 22, 23)
 """
 
 
@@ -264,30 +264,4 @@ Mera optimizacije cos(bias, freq_csv) u suštini vodi ka reprodukciji same frekv
 mod-39 mapiranje 2^nq → 39 kanti briše razlike unutar kante.
 Nema temporalne zavisnosti (redosled izvlačenja se ignoriše).
 Eksponencijalno po nq kroz Statevector.
-"""
-
-
-
-
-
-
-"""
-
-1. QNN kao fiksni forward pass — ZZFeatureMap + RealAmplitudes, inputs i weights iz CSV-a (to je A što već radi).
-
-2. Grover / Amplitude Amplification — top-M po frekvenciji iz CSV-a se amplifikuje (to je B).
-
-3. Quantum Perceptron (Kapoor–Wiebe–Svore, 2016) — „pravi“ kvantni perceptron; trening ide kroz Grover search nad težinama, ne klasičnim optimizerom. Najčistije „pure quantum NN učenje“ u literaturi.
-
-4. Quantum Convolutional Neural Network (Cong–Choi–Lukin) — strukturni kvantni ansatz (conv + pool + FC kapija na qubit-ima); sa deterministički izvedenim težinama iz CSV-a — forward pass bez klasičnog učenja.
-
-5. Quantum Reservoir Computing (QRC) — fiksna kvantna dinamika (nasumičan Hamiltonijan iz CSV-seed), readout ide čisto kvantno (Pauli merenja); bez treninga kvantnog dela.
-
-6. Quantum Boltzmann Machine (QBM) — inferenca — priprema Gibbs stanja za fiksni Hamiltonijan (iz CSV statistike); uzorkuje iz njega. Generativni kvantni NN.
-
-7. Quantum Associative Memory (Ventura–Martinez) — skladištenje „obrazaca“ (prethodne sedmorke) u superpoziciju, dohvat preko Grover-like pretrage.
-
-8. Quantum Amplitude Estimation (QAE) — kvantno estimovanje verovatnoća „dobrih“ stanja umesto klasičnog izbora.
-
-Moja preporuka (najbliže „pravom NN-u“ pod pravilom 8): 3 (Quantum Perceptron) ili 4 (QCNN). Obe su literaturno jake i čisto kvantne.
 """
